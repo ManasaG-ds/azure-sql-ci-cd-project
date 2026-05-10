@@ -1,9 +1,0 @@
-trigger:
-- main
-
-pool:
-  vmImage: ubuntu-latest
-
-steps:
-- script: echo "CI/CD pipeline connected successfully!"
-  displayName: "Test pipeline"
