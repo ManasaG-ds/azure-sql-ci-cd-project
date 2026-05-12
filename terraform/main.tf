@@ -15,7 +15,7 @@ resource "random_string" "suffix" {
 
 module "sql" {
   source = ".//modules/sql"
-  server_name = "${var.sql_server_name_prefix}-${random_string.suffix.result}"
+  server_name = var.sql_server_name
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = data.azurerm_resource_group.rg.location
 

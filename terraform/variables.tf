@@ -20,7 +20,7 @@ variable "resource_group_name" {
 }
 
 
-variable "sql_server_name_prefix" {
+variable "sql_server_name" {
   description = "SQL server name"
   type        = string
 }
