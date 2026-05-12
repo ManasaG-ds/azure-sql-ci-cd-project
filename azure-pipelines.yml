@@ -23,7 +23,7 @@ stages:
     - script: rm -rf .terraform .terraform.lock.hcl
       workingDirectory: terraform
 
-    - script: terraform init -upgrade
+    - script: terraform init -upgrade -reconfigure
       workingDirectory: terraform
       displayName: "Terraform Init"
 
@@ -48,8 +48,12 @@ stages:
       inputs:
         terraformVersion: '1.6.0'
 
-    - script: terraform init
+    - script: rm -rf .terraform .terraform.lock.hcl
       workingDirectory: terraform
+
+    - script: terraform init -upgrade -reconfigure
+      workingDirectory: terraform
+      displayName: "Terraform Init"
 
     - script: terraform plan -out=tfplan
       workingDirectory: terraform
@@ -76,11 +80,15 @@ stages:
       inputs:
         terraformVersion: '1.6.0'
 
+    - script: rm -rf .terraform .terraform.lock.hcl
+      workingDirectory: terraform
+
     - download: current
       artifact: tfplan
 
-    - script: terraform init
+    - script: terraform init -upgrade -reconfigure
       workingDirectory: terraform
+      displayName: "Terraform Init"
 
     - script: terraform apply -auto-approve tfplan
       workingDirectory: terraform
