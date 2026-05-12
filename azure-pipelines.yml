@@ -22,11 +22,11 @@ stages:
         terraformVersion: '1.6.0'
 
     - script: terraform init
-      workingDirectory: terraform/dev
+      workingDirectory: terraform
       displayName: "Terraform Init"
 
     - script: terraform validate
-      workingDirectory: terraform/dev
+      workingDirectory: terraform
       displayName: "Terraform Validate"
 
 
@@ -47,13 +47,13 @@ stages:
         terraformVersion: '1.6.0'
 
     - script: terraform init
-      workingDirectory: terraform/dev
+      workingDirectory: terraform
 
     - script: terraform plan -out=tfplan
-      workingDirectory: terraform/dev
+      workingDirectory: terraform
       displayName: "Terraform Plan"
 
-    - publish: terraform/dev/tfplan
+    - publish: terraform/tfplan
       artifact: tfplan
 
 
@@ -78,10 +78,10 @@ stages:
       artifact: tfplan
 
     - script: terraform init
-      workingDirectory: terraform/dev
+      workingDirectory: terraform
 
     - script: terraform apply -auto-approve tfplan
-      workingDirectory: terraform/dev
+      workingDirectory: terraform
       displayName: "Terraform Apply"
 
 
