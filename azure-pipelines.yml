@@ -51,23 +51,19 @@ stages:
 
     - script: terraform init -upgrade -reconfigure
       workingDirectory: terraform
-      displayName: "Terraform Init"
+      displayName: "Terraform Init"   
+      
+    - script: |
+      export TF_VAR_admin_password=$(DB_PASSWORD)
+      export TF_VAR_db_user=$(DB_USER)
+      export TF_VAR_sql_server_name=$(DB_SERVER)
+      export TF_VAR_resource_group_name=$(resource_group_name)
+      export TF_VAR_database_name=$(database_name)
+      export TF_VAR_ip_address=$(ip_address)
 
-       
-
-- script: |
-    export TF_VAR_admin_password=$(DB_PASSWORD)
-    export TF_VAR_db_user=$(DB_USER)
-    export TF_VAR_sql_server_name=$(DB_SERVER)
-    export TF_VAR_resource_group_name=$(resource_group_name)
-    export TF_VAR_database_name=$(database_name)
-    export TF_VAR_ip_address=$(ip_address)
-
-    echo "Variables exported successfully"
-  displayName: "Set Terraform Variables"
-    
+      echo "Variables exported successfully"
       workingDirectory: terraform
-      displayName: "Terraform Plan"
+      displayName: "Set Terraform Variables"
 
     - script: terraform plan -out=tfplan -input=false
       workingDirectory: terraform
