@@ -1,9 +1,112 @@
 trigger:
 - main
 
-pool:
-  vmImage: ubuntu-latest
+variables:
+- group: terraform-secrets   # contains ARM + DB secrets
 
-steps:
-- script: echo "CI/CD pipeline connected successfully!"
-  displayName: "Test pipeline"
+stages:
+
+# -----------------------------
+# STAGE 1: VALIDATE
+# -----------------------------
+- stage: Validate
+  displayName: "Validate Terraform"
+  jobs:
+  - job: Validate
+    pool:
+      vmImage: ubuntu-latest
+
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: '1.6.0'
+
+    - script: terraform init
+      workingDirectory: terraform/dev
+      displayName: "Terraform Init"
+
+    - script: terraform validate
+      workingDirectory: terraform/dev
+      displayName: "Terraform Validate"
+
+
+# -----------------------------
+# STAGE 2: PLAN
+# -----------------------------
+- stage: Plan
+  displayName: "Terraform Plan"
+  dependsOn: Validate
+  jobs:
+  - job: Plan
+    pool:
+      vmImage: ubuntu-latest
+
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: '1.6.0'
+
+    - script: terraform init
+      workingDirectory: terraform/dev
+
+    - script: terraform plan -out=tfplan
+      workingDirectory: terraform/dev
+      displayName: "Terraform Plan"
+
+    - publish: terraform/dev/tfplan
+      artifact: tfplan
+
+
+# -----------------------------
+# STAGE 3: APPLY
+# -----------------------------
+- stage: Apply
+  displayName: "Terraform Apply"
+  dependsOn: Plan
+  condition: succeeded()
+  jobs:
+  - job: Apply
+    pool:
+      vmImage: ubuntu-latest
+
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: '1.6.0'
+
+    - download: current
+      artifact: tfplan
+
+    - script: terraform init
+      workingDirectory: terraform/dev
+
+    - script: terraform apply -auto-approve tfplan
+      workingDirectory: terraform/dev
+      displayName: "Terraform Apply"
+
+
+# -----------------------------
+# STAGE 4: DATABASE MIGRATION
+# -----------------------------
+- stage: Flyway
+  displayName: "Database Migration"
+  dependsOn: Apply
+  jobs:
+  - job: FlywayMigration
+    pool:
+      vmImage: ubuntu-latest
+
+    steps:
+    - script: |
+        curl -L https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/9.22.0/flyway-commandline-9.22.0-linux-x64.tar.gz -o flyway.tar.gz
+        tar -xzf flyway.tar.gz
+        sudo ln -s $(pwd)/flyway-9.22.0/flyway /usr/local/bin/flyway
+      displayName: "Install Flyway"
+
+    - script: |
+        flyway -url=jdbc:sqlserver://$(DB_SERVER).database.windows.net \
+               -user=$(DB_USER) \
+               -password=$(DB_PASSWORD) \
+               -locations=filesystem:sql \
+               migrate
+      displayName: "Run Flyway Migrations"
