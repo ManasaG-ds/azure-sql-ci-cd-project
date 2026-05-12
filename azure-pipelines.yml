@@ -122,6 +122,6 @@ stages:
       displayName: "Install Flyway"
 
     - script: |
-        flyway -configFiles=$(Build.SourcesDirectory)/flyway.conf migrate
+        flyway -configFiles=$(Build.SourcesDirectory)/flyway/config/flyway.conf migrate
       displayName: "Run Flyway Migrations"
 
