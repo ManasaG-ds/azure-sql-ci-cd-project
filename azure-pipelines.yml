@@ -125,6 +125,6 @@ stages:
         flyway -url=jdbc:sqlserver://$(DB_SERVER).database.windows.net \
                -user=$(DB_USER) \
                -password=$(DB_PASSWORD) \
-               -locations=filesystem:sql \
+               -locations=filesystem:$(Build.SourcesDirectory)/flyway/sql \
                migrate
       displayName: "Run Flyway Migrations"
