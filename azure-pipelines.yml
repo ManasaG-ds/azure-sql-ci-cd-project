@@ -87,16 +87,20 @@ stages:
     - script: rm -rf .terraform .terraform.lock.hcl
       workingDirectory: terraform
 
-    - download: current
-      artifact: tfplan
-
     - script: terraform init -upgrade -reconfigure
       workingDirectory: terraform
       displayName: "Terraform Init"
 
-    - script: terraform apply -auto-approve tfplan
+    - script: terraform apply -auto-approve
       workingDirectory: terraform
       displayName: "Terraform Apply"
+      env:
+        TF_VAR_admin_password: $(DB_PASSWORD)
+        TF_VAR_admin_user: "sqladmin"
+        TF_VAR_sql_server_name: $(DB_SERVER)
+        TF_VAR_resource_group_name: $(resource_group_name)
+        TF_VAR_database_name: $(database_name)
+        TF_VAR_ip_address: $(ip_address)
 
 
 # -----------------------------
