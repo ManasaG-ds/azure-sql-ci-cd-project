@@ -53,15 +53,15 @@ stages:
       workingDirectory: terraform
       displayName: "Terraform Init"   
       
-    - script: terraform plan -input=false
-      workingDirectory: terraform
+    - script: 
       env:
         TF_VAR_admin_password: $(DB_PASSWORD)
-        TF_VAR_admin_user: $(DB_USER)
+        TF_VAR_admin_user: "sqladmin"
         TF_VAR_sql_server_name: $(DB_SERVER)
         TF_VAR_resource_group_name: $(resource_group_name)
         TF_VAR_database_name: $(database_name)
         TF_VAR_ip_address: $(ip_address)
+      workingDirectory: terraform
       displayName: "Terraform Plan"
 
     - script: terraform plan -out=tfplan -input=false
