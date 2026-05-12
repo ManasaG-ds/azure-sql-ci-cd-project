@@ -1,5 +1,5 @@
-trigger:
-- main
+trigger: none
+
 
 variables:
 - group: terraform-secrets   # contains ARM + DB secrets
@@ -122,9 +122,6 @@ stages:
       displayName: "Install Flyway"
 
     - script: |
-        flyway -url=jdbc:sqlserver://$(DB_SERVER).database.windows.net \
-               -user=$(DB_USER) \
-               -password=$(DB_PASSWORD) \
-               -locations=filesystem:$(Build.SourcesDirectory)/flyway/sql \
-               migrate
+        flyway -configFiles=$(Build.SourcesDirectory)/flyway.conf migrate
       displayName: "Run Flyway Migrations"
+
