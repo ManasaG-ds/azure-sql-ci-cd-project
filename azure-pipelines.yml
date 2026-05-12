@@ -20,7 +20,11 @@ stages:
 
     - task: TerraformInstaller@1
 
-    - script: terraform init
+    - script: |
+      rm -rf .terraform .terraform.lock.hcl
+      workingDirectory: terraform
+
+    - script: terraform init -upgrade
       workingDirectory: terraform
       displayName: "Terraform Init"
 
