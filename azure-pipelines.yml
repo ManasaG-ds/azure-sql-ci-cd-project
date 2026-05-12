@@ -53,7 +53,11 @@ stages:
       workingDirectory: terraform
       displayName: "Terraform Init"
 
-    - script: terraform plan -out=tfplan
+    - script: export TF_VAR_admin_password=$(DB_PASSWORD)
+      workingDirectory: terraform
+      displayName: "Terraform Plan"
+
+    - script: terraform plan -out=tfplan -input=false
       workingDirectory: terraform
       displayName: "Terraform Plan"
 
