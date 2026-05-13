@@ -1,1 +1,100 @@
+parameters:
+- name: environmentName
+  type: string
 
+- name: displayEnvironmentName
+  type: string
+
+- name: variableGroup
+  type: string
+
+- name: dependsOn
+  type: string
+
+- name: backendStateKey
+  type: string
+
+
+stages:
+- stage: Terraform_${{ parameters.environmentName }}
+  displayName: "${{ parameters.displayEnvironmentName }} - Terraform Plan and Apply"
+  dependsOn: ${{ parameters.dependsOn }}
+  condition: succeeded()
+
+  variables:
+  - group: ${{ parameters.variableGroup }}
+
+  jobs:
+
+  # -----------------------------
+  # PLAN
+  # -----------------------------
+  - job: Plan
+    displayName: "${{ parameters.displayEnvironmentName }} - Terraform Plan"
+    pool:
+      vmImage: ubuntu-latest
+
+    steps:
+    - task: TerraformInstaller@1
+
+    - script: rm -rf .terraform .terraform.lock.hcl
+      workingDirectory: terraform
+      displayName: "Clean Terraform Files"
+
+    - script: |
+        terraform init -upgrade -reconfigure \
+          -backend-config="key=${{ parameters.backendStateKey }}"
+      workingDirectory: terraform
+      displayName: "Terraform Init - ${{ parameters.displayEnvironmentName }}"
+
+    - script: terraform plan -out=tfplan -input=false
+      workingDirectory: terraform
+      displayName: "Terraform Plan - ${{ parameters.displayEnvironmentName }}"
+      env:
+        TF_VAR_admin_password: $(DB_PASSWORD)
+        TF_VAR_admin_user: $(DB_USER)
+        TF_VAR_sql_server_name: $(DB_SERVER)
+        TF_VAR_resource_group_name: $(resource_group_name)
+        TF_VAR_database_name: $(database_name)
+        TF_VAR_ip_address: $(ip_address)
+
+    - publish: terraform/tfplan
+      artifact: tfplan-${{ parameters.environmentName }}
+
+
+  # -----------------------------
+  # APPLY
+  # -----------------------------
+  - job: Apply
+    displayName: "${{ parameters.displayEnvironmentName }} - Terraform Apply"
+    dependsOn: Plan
+    condition: succeeded()
+    pool:
+      vmImage: ubuntu-latest
+
+    steps:
+    - task: TerraformInstaller@1
+
+    - script: rm -rf .terraform .terraform.lock.hcl
+      workingDirectory: terraform
+      displayName: "Clean Terraform Files"
+
+    - script: |
+        terraform init -upgrade -reconfigure \
+          -backend-config="key=${{ parameters.backendStateKey }}"
+      workingDirectory: terraform
+      displayName: "Terraform Init - ${{ parameters.displayEnvironmentName }}"
+
+    - download: current
+      artifact: tfplan-${{ parameters.environmentName }}
+
+    - script: terraform apply -auto-approve $(Pipeline.Workspace)/tfplan-${{ parameters.environmentName }}/tfplan
+      workingDirectory: terraform
+      displayName: "Terraform Apply - ${{ parameters.displayEnvironmentName }}"
+      env:
+        TF_VAR_admin_password: $(DB_PASSWORD)
+        TF_VAR_admin_user: $(DB_USER)
+        TF_VAR_sql_server_name: $(DB_SERVER)
+        TF_VAR_resource_group_name: $(resource_group_name)
+        TF_VAR_database_name: $(database_name)
+        TF_VAR_ip_address: $(ip_address)
