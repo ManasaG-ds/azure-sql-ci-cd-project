@@ -22,7 +22,7 @@ stages:
   - group: ${{ parameters.variableGroup }}
 
   jobs:
-  - job: FlywayMigration
+  - deployment: FlywayMigration
     displayName: "${{ parameters.displayEnvironmentName }} - Flyway Migration"
     environment: ${{ parameters.environmentName }}
     pool:
