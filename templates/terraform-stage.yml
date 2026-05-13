@@ -46,8 +46,11 @@ stages:
 
     - script: |
         terraform init -upgrade -reconfigure \
+          -backend-config="resource_group_name=$(tfstate_resource_group)" \
+          -backend-config="storage_account_name=$(tfstate_storage_account)" \
+          -backend-config="container_name=$(tfstate_container)" \
           -backend-config="key=${{ parameters.backendStateKey }}"
-      workingDirectory: terraform
+      workingDirectory: $(Build.SourcesDirectory)/terraform
       displayName: "Terraform Init - ${{ parameters.displayEnvironmentName }}"
 
     - script: terraform plan -out=tfplan -input=false
