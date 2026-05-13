@@ -55,8 +55,8 @@ stages:
           -backend-config="resource_group_name=$(tfstate_resource_group)" \
           -backend-config="storage_account_name=$(tfstate_storage_account)" \
           -backend-config="container_name=$(tfstate_container)" \
-          -backend-config="key=${{ parameters.backendStateKey }}"\
-          -backend-config="use_azuread_auth=true"
+          -backend-config="key=${{ parameters.backendStateKey }}" \
+          -backend-config="access_key=$(tfstate_access_key)"
       workingDirectory: $(Build.SourcesDirectory)/terraform
       displayName: "Terraform Init - ${{ parameters.displayEnvironmentName }}"
 
@@ -112,7 +112,8 @@ stages:
                 -backend-config="resource_group_name=$(tfstate_resource_group)" \
                 -backend-config="storage_account_name=$(tfstate_storage_account)" \
                 -backend-config="container_name=$(tfstate_container)" \
-                -backend-config="key=${{ parameters.backendStateKey }}"
+                -backend-config="key=${{ parameters.backendStateKey }}" \
+                -backend-config="access_key=$(tfstate_access_key)"
             workingDirectory: $(Build.SourcesDirectory)/terraform
             displayName: "Terraform Init - ${{ parameters.displayEnvironmentName }}"
         
