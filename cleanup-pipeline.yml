@@ -37,6 +37,13 @@ stages:
       workingDirectory: $(Build.SourcesDirectory)/terraform
       displayName: "Clean Terraform Files"
 
+
+    - script: |
+        echo "RG=$(tfstate_resource_group)"
+        echo "SA=$(tfstate_storage_account)"
+        echo "CONTAINER=$(tfstate_container)"
+      displayName: "Debug backend variables"
+
     - script: |
         terraform init -upgrade -reconfigure \
           -backend-config="resource_group_name=$(tfstate_resource_group)" \
