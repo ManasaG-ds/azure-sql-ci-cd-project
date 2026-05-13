@@ -1,0 +1,62 @@
+trigger: none
+
+pr:
+  branches:
+    include:
+      - main
+
+variables:
+- group: dev-terraform-secrets
+
+stages:
+
+- stage: PR_Validation
+  displayName: "PR Validation"
+  jobs:
+  - job: Validate
+    displayName: "Validate Terraform and Flyway"
+    pool:
+      vmImage: ubuntu-latest
+
+    steps:
+    - task: TerraformInstaller@1
+
+    - script: rm -rf .terraform .terraform.lock.hcl
+      workingDirectory: terraform
+      displayName: "Clean Terraform Files"
+
+    - script: |
+        terraform init -upgrade -reconfigure \
+          -backend-config="key=dev.tfstate"
+      workingDirectory: terraform
+      displayName: "Terraform Init"
+
+    - script: terraform validate
+      workingDirectory: terraform
+      displayName: "Terraform Validate"
+
+    - script: terraform plan -input=false
+      workingDirectory: terraform
+      displayName: "Terraform Plan Check"
+      env:
+        TF_VAR_admin_password: $(DB_PASSWORD)
+        TF_VAR_admin_user: $(DB_USER)
+        TF_VAR_sql_server_name: $(DB_SERVER)
+        TF_VAR_resource_group_name: $(resource_group_name)
+        TF_VAR_database_name: $(database_name)
+        TF_VAR_ip_address: $(ip_address)
+        TF_VAR_create_sql_server: "true"
+
+    - script: |
+        curl -L https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/9.22.0/flyway-commandline-9.22.0-linux-x64.tar.gz -o flyway.tar.gz
+        tar -xzf flyway.tar.gz
+        sudo ln -s $(pwd)/flyway-9.22.0/flyway /usr/local/bin/flyway
+      displayName: "Install Flyway"
+
+    - script: |
+        flyway -configFiles=$(Build.SourcesDirectory)/flyway/config/flyway.conf validate
+      displayName: "Flyway Validate"
+      env:
+        FLYWAY_URL: "jdbc:sqlserver://$(DB_SERVER).database.windows.net:1433;databaseName=$(database_name);encrypt=true;trustServerCertificate=false;loginTimeout=30;"
+        FLYWAY_USER: $(DB_USER)
+        FLYWAY_PASSWORD: $(DB_PASSWORD)
