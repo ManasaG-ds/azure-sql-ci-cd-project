@@ -1,145 +1,267 @@
-# 🚀 Azure SQL CI/CD Pipeline (Terraform + Flyway + Azure DevOps)
+# 🚀 Azure SQL Database CI/CD Pipeline using Terraform, Flyway & Azure DevOps
 
-## 📌 Overview
+## 📌 Project Overview
 
-This project demonstrates a real-world **CI/CD pipeline for Azure SQL Database**, integrating:
+This project demonstrates an enterprise-style **Database DevOps CI/CD pipeline** for **Azure SQL Database**, integrating:
 
-* **Terraform** → Infrastructure provisioning (Azure SQL Server & Database)
-* **Flyway** → Database schema versioning and migrations
-* **Azure DevOps** → CI/CD automation pipeline
+* **Terraform** for Infrastructure as Code (IaC)
+* **Flyway** for database schema versioning and migrations
+* **Azure DevOps** for CI/CD automation
+* **GitHub Pull Requests** for validation-driven deployments
 
-The project simulates an enterprise-grade database deployment workflow used in modern DevOps environments.
-
-## 🧰 Prerequisites
-* Azure Subscription with permissions to create SQL resources
-* Terraform (>= 1.5) installed
-* Flyway (>= 9.x) installed
-* Azure DevOps account and project setup
-* Service Principal configured for Azure authentication
-* Git installed
-* SQL client tool (SSMS or Azure Data Studio – optional)
-* Basic knowledge of Azure SQL, Terraform, and CI/CD pipelines
+The solution simulates a modern database deployment workflow used in cloud-native DevOps environments, with automated infrastructure provisioning, schema deployment, multi-environment support, and pull request validation.
 
 ---
 
-# ✅ What I Have Implemented So Far
+# 🏗️ Solution Architecture
 
-## 🏗️ Infrastructure Automation (Terraform)
+## Core Components
 
-* Provisioned **Azure SQL Server**
-* Created **Azure SQL Database**
-* Configured required infrastructure using Infrastructure as Code (IaC)
-* Defined reusable variables for modular deployment
-
----
-
-## 🧱 Database Version Control (Flyway)
-
-* Implemented Flyway-based schema migration system
-* Created versioned SQL scripts for:
-  * Table creation
-  * Initial data insertion
-* Ensured repeatable and consistent database deployments
+| Component          | Purpose                                     |
+| ------------------ | ------------------------------------------- |
+| Terraform          | Provision Azure SQL infrastructure          |
+| Flyway             | Manage versioned database schema migrations |
+| Azure DevOps       | Automate CI/CD workflows                    |
+| GitHub PR Workflow | Enable validation before merge              |
+| Azure SQL Database | Cloud-hosted relational database            |
+| Variable Groups    | Secure environment-specific configuration   |
 
 ---
 
-## 🔄 CI/CD Pipeline (Azure DevOps)
+# 🔄 CI/CD Workflow
 
-Built a fully automated multi-stage pipeline:
+## Pull Request Validation Flow
 
-### Pipeline Stages:
+```text
+Feature Branch
+    ↓
+Pull Request to main
+    ↓
+PR Validation Pipeline
+(terraform validate + terraform plan + flyway validate)
+    ↓
+Merge Approval
+```
 
-1. **Terraform Validate**
+## Deployment Flow
 
-   * Ensures infrastructure code correctness
-
-2. **Terraform Plan**
-
-   * Displays execution plan before deployment
-
-3. **Terraform Apply**
-
-   * Provisions Azure SQL infrastructure
-
-4. **Flyway Migration Stage**
-
-   * Executes database schema changes automatically
-
----
-
-## 🔐 Basic Security Practices Implemented
-
-* Parameterized sensitive variables
-* Avoided hardcoding credentials in pipeline code
-* Used structured variable management approach
-
----
-
-# 🚧 Future Enhancements (In Progress / Planned Work)
-
-## 🌍 Multi-Environment Strategy
-
-* Add support for **Dev / QA / Prod environments**
-* Environment-based deployment pipelines
-* Production approval gates in Azure DevOps
+```text
+Merge to main
+    ↓
+Deployment Pipeline Triggered
+    ↓
+Terraform Validate
+    ↓
+Terraform Plan
+    ↓
+Terraform Apply
+    ↓
+Flyway Database Migration
+    ↓
+DEV Environment
+    ↓
+TEST Environment
+```
 
 ---
 
-## 🔐 Secrets & Security Hardening
+# ✅ Features Implemented
 
-* Integrate **Azure Key Vault** for secrets management
-* Implement service principal-based authentication
-* Apply least privilege access model
+## 🏗️ Infrastructure as Code (Terraform)
 
----
+Implemented modular Terraform-based Azure infrastructure deployment:
 
-## 📊 Database Reliability Improvements
+* Azure SQL Server provisioning
+* Azure SQL Database creation
+* Firewall rule configuration
+* Reusable Terraform module structure
+* Environment-based Terraform state separation
+* Parameterized infrastructure deployment using pipeline variables
 
-* Add Flyway **migration validation stage**
-* Implement **rollback strategy** for schema changes
-* Add post-deployment validation checks (data integrity, schema verification)
+### Terraform Highlights
 
----
-
-## 🔁 Infrastructure Governance
-
-* Add Terraform **state drift detection**
-* Scheduled validation pipelines
-* Prevent manual configuration changes in Azure resources
+* Reusable Terraform templates
+* Separate Terraform state files for DEV and TEST
+* Shared SQL Server with environment-specific databases
+* Environment-driven configuration through Azure DevOps variable groups
 
 ---
 
-## 📈 Observability & Monitoring
+## 🧱 Database Migration Management (Flyway)
 
-* Integrate Azure Monitor / Log Analytics
-* Track database performance and pipeline execution logs
-* Centralized logging for migrations
+Implemented Flyway-based database schema version control and deployment automation.
+
+### Implemented Migration Features
+
+* Versioned migration scripts
+* Automated schema deployment
+* Database initialization scripts
+* Seed/reference data management
+* Migration validation during PR checks
+* Environment-specific migration execution
+
+### Example Migration Activities
+
+* Table creation
+* Schema updates
+* Seed/reference data insertion
 
 ---
 
-## 🧪 Testing Enhancements
+## 🔄 Azure DevOps CI/CD Pipeline
 
-* Add automated database validation tests
-* Schema verification after deployment
-* Data consistency checks after Flyway execution
+Built a reusable multi-stage YAML pipeline architecture.
+
+### Pipeline Capabilities
+
+* Terraform validation
+* Terraform planning
+* Infrastructure deployment
+* Automated Flyway migrations
+* Reusable YAML templates
+* DEV and TEST environment deployments
+* Environment-specific variable groups
+* Pull Request validation workflow
+
+### Template-Based Pipeline Design
+
+Reusable pipeline templates were implemented to reduce duplication and standardize deployments across environments.
 
 ---
 
-# 🧠 Key Skills Demonstrated
+## 🔀 Pull Request Validation Workflow
 
-* Azure DevOps CI/CD pipeline design
+Implemented a GitHub Pull Request validation model integrated with Azure DevOps pipelines.
+
+### PR Validation Includes
+
+* Terraform validation
+* Terraform plan checks
+* Flyway migration validation
+* Merge protection using required checks
+
+This ensures infrastructure and database changes are validated before deployment.
+
+---
+
+## 🔐 Security & Configuration Management
+
+Implemented foundational DevOps security practices:
+
+* Removed hardcoded credentials from Flyway configuration
+* Secure pipeline variable usage
+* Environment-based secret separation
+* Parameterized deployment configuration
+* Sensitive values managed through Azure DevOps variable groups
+
+---
+
+# 🌍 Multi-Environment Deployment Strategy
+
+Implemented separate deployment flows for:
+
+| Environment | Purpose                                        |
+| ----------- | ---------------------------------------------- |
+| DEV         | Infrastructure provisioning and schema testing |
+| TEST        | Post-validation deployment testing             |
+
+### Environment Isolation Features
+
+* Separate Terraform state files
+* Environment-specific variable groups
+* Independent database deployments
+* Shared infrastructure with controlled reuse
+
+---
+
+# 📂 Repository Structure
+
+```text
+.
+├── flyway/
+│   ├── config/
+│   └── sql/
+│
+├── templates/
+│   ├── terraform-stage.yml
+│   └── flyway-stage.yml
+│
+├── terraform/
+│   ├── modules/sql/
+│   ├── main.tf
+│   ├── variables.tf
+│   └── outputs.tf
+│
+├── azure-pipelines.yml
+├── pr-validation-pipeline.yml
+└── README.md
+```
+
+---
+
+# 🧰 Technologies Used
+
+* Terraform
+* Azure SQL Database
+* Flyway
+* Azure DevOps Pipelines
+* GitHub Pull Requests
+* YAML
+* Microsoft Azure
+
+---
+
+# 🚧 Planned Enhancements
+
+## 🔐 Security Hardening
+
+* Azure Key Vault integration
+* Managed Identity authentication
+* Role-based access control (RBAC)
+
+## 📊 Observability & Monitoring
+
+* Azure Monitor integration
+* Log Analytics integration
+* Deployment and migration logging
+
+## 🧪 Advanced Validation
+
+* Automated schema validation tests
+* Data integrity verification
+* Post-deployment smoke tests
+
+## 🔁 Governance Improvements
+
+* Terraform drift detection
+* Automated policy enforcement
+* Scheduled infrastructure validation
+
+---
+
+# 🧠 Skills Demonstrated
+
+* Database DevOps practices
+* Azure DevOps CI/CD pipeline engineering
 * Infrastructure as Code (Terraform)
-* SQL Server administration
-* Database migration management (Flyway)
-* Cloud automation on Microsoft Azure
-* DevOps best practices for database systems
+* Azure SQL administration
+* Database schema migration automation
+* Multi-environment deployment strategy
+* Pull Request validation workflows
+* YAML template modularization
+* Secure configuration management
 
 ---
 
 # 🎯 Project Outcome
 
-This project demonstrates a **production-style database CI/CD pipeline**, combining infrastructure provisioning and database lifecycle management into a fully automated workflow.
+This project demonstrates a production-style Azure SQL Database CI/CD implementation that combines:
 
-It reflects real-world DevOps practices used in enterprise Azure environments.
+* Infrastructure provisioning
+* Database migration automation
+* Pull Request validation
+* Multi-environment deployment
+* Reusable CI/CD templates
+* Secure deployment practices
 
----
+The solution reflects modern enterprise DevOps workflows used for cloud-based database delivery and automation.
