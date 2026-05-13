@@ -1,3 +1,9 @@
+variable "create_sql_server" {
+  type    = bool
+  default = true
+}
+
+
 variable "admin_user" {
   description = "SQL admin user"
   type        = string

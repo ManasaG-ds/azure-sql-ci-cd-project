@@ -6,15 +6,10 @@ data "azurerm_resource_group" "rg" {
   name = var.resource_group_name
 }
 
-resource "random_string" "suffix" {
-  length  = 5
-  special = false
-  upper   = false
-}
-
 
 module "sql" {
   source = ".//modules/sql"
+  create_sql_server   = var.create_sql_server
   server_name = var.sql_server_name
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = data.azurerm_resource_group.rg.location
