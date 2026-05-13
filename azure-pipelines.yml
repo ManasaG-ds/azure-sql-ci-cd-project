@@ -40,6 +40,7 @@ stages:
     variableGroup: dev-terraform-secrets
     dependsOn: Validate
     backendStateKey: dev.tfstate
+    createSqlServer: "true"
 
 - template: templates/flyway-stage.yml
   parameters:
@@ -59,6 +60,7 @@ stages:
     variableGroup: test-terraform-secrets
     dependsOn: Flyway_dev
     backendStateKey: test.tfstate
+    createSqlServer: "false"
 
 - template: templates/flyway-stage.yml
   parameters:
