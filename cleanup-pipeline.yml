@@ -1,0 +1,59 @@
+trigger: none
+
+parameters:
+- name: environment
+  displayName: "Environment to Destroy"
+  type: string
+  default: dev
+  values:
+    - dev
+    - test
+
+stages:
+
+- stage: Destroy
+  displayName: "Terraform Destroy"
+
+  variables:
+  - ${{ if eq(parameters.environment, 'dev') }}:
+    - group: dev-terraform-secrets
+
+  - ${{ if eq(parameters.environment, 'test') }}:
+    - group: test-terraform-secrets
+
+  jobs:
+  - job: Destroy
+    displayName: "Destroy Infrastructure"
+
+    pool:
+      vmImage: ubuntu-latest
+
+    steps:
+    - checkout: self
+
+    - task: TerraformInstaller@1
+
+    - script: rm -rf .terraform .terraform.lock.hcl
+      workingDirectory: $(Build.SourcesDirectory)/terraform
+      displayName: "Clean Terraform Files"
+
+    - script: |
+        terraform init -upgrade -reconfigure \
+          -backend-config="key=${{ parameters.environment }}.tfstate"
+      workingDirectory: $(Build.SourcesDirectory)/terraform
+      displayName: "Terraform Init"
+
+    - script: terraform destroy -auto-approve
+      workingDirectory: $(Build.SourcesDirectory)/terraform
+      displayName: "Terraform Destroy"
+      env:
+        TF_VAR_admin_password: $(DB_PASSWORD)
+        TF_VAR_admin_user: $(DB_USER)
+        TF_VAR_sql_server_name: $(DB_SERVER)
+        TF_VAR_resource_group_name: $(resource_group_name)
+        TF_VAR_database_name: $(database_name)
+        TF_VAR_ip_address: $(ip_address)
+
+        # DEV creates server
+        # TEST reuses server
+        TF_VAR_create_sql_server: ${{ if eq(parameters.environment, 'dev') }}true${{ else }}false
