@@ -37,7 +37,7 @@ stages:
           -backend-config="storage_account_name=$(tfstate_storage_account)" \
           -backend-config="container_name=$(tfstate_container)" \
           -backend-config="key=dev.tfstate" \
-          -backend-config="use_azuread_auth=true"
+          -backend-config="access_key=$(tfstate_access_key)"
       workingDirectory: $(Build.SourcesDirectory)/terraform
       displayName: "Terraform Init"
 
