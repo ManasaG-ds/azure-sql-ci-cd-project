@@ -56,4 +56,8 @@ stages:
 
         # DEV creates server
         # TEST reuses server
-        TF_VAR_create_sql_server: ${{ if eq(parameters.environment, 'dev') }}true${{ else }}false
+        ${{ if eq(parameters.environment, 'dev') }}:
+          TF_VAR_create_sql_server: "true"
+        
+        ${{ if eq(parameters.environment, 'test') }}:
+          TF_VAR_create_sql_server: "false"
