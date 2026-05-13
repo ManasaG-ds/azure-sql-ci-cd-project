@@ -81,23 +81,27 @@ stages:
       runOnce:
         deploy:
           steps:
+          - checkout: self
           - task: TerraformInstaller@1
+
+          - script: ls -la $(Build.SourcesDirectory)
+            displayName: "Debug source directory"
         
           - script: rm -rf .terraform .terraform.lock.hcl
-            workingDirectory: terraform
+            workingDirectory: $(Build.SourcesDirectory)/terraform
             displayName: "Clean Terraform Files"
         
           - script: |
               terraform init -upgrade -reconfigure \
                 -backend-config="key=${{ parameters.backendStateKey }}"
-            workingDirectory: terraform
+            workingDirectory: $(Build.SourcesDirectory)/terraform
             displayName: "Terraform Init - ${{ parameters.displayEnvironmentName }}"
         
           - download: current
             artifact: tfplan-${{ parameters.environmentName }}
         
           - script: terraform apply -auto-approve $(Pipeline.Workspace)/tfplan-${{ parameters.environmentName }}/tfplan
-            workingDirectory: terraform
+            workingDirectory: $(Build.SourcesDirectory)/terraform
             displayName: "Terraform Apply - ${{ parameters.displayEnvironmentName }}"
             env:
               TF_VAR_admin_password: $(DB_PASSWORD)
