@@ -45,6 +45,12 @@ stages:
       displayName: "Clean Terraform Files"
 
     - script: |
+        echo "RG=$(tfstate_resource_group)"
+        echo "SA=$(tfstate_storage_account)"
+        echo "CONTAINER=$(tfstate_container)"
+      displayName: "Debug backend variables"
+
+    - script: |
         terraform init -upgrade -reconfigure \
           -backend-config="resource_group_name=$(tfstate_resource_group)" \
           -backend-config="storage_account_name=$(tfstate_storage_account)" \
@@ -93,6 +99,12 @@ stages:
           - script: rm -rf .terraform .terraform.lock.hcl
             workingDirectory: $(Build.SourcesDirectory)/terraform
             displayName: "Clean Terraform Files"
+
+          - script: |
+              echo "RG=$(tfstate_resource_group)"
+              echo "SA=$(tfstate_storage_account)"
+              echo "CONTAINER=$(tfstate_container)"
+            displayName: "Debug backend variables"
         
           - script: |
               terraform init -upgrade -reconfigure \
