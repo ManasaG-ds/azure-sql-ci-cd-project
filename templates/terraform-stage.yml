@@ -69,37 +69,41 @@ stages:
   # -----------------------------
   # APPLY
   # -----------------------------
-  - job: Apply
+  - deployment: Apply
     displayName: "${{ parameters.displayEnvironmentName }} - Terraform Apply"
     dependsOn: Plan
     condition: succeeded()
+    environment: ${{ parameters.environmentName }}
     pool:
       vmImage: ubuntu-latest
 
-    steps:
-    - task: TerraformInstaller@1
-
-    - script: rm -rf .terraform .terraform.lock.hcl
-      workingDirectory: terraform
-      displayName: "Clean Terraform Files"
-
-    - script: |
-        terraform init -upgrade -reconfigure \
-          -backend-config="key=${{ parameters.backendStateKey }}"
-      workingDirectory: terraform
-      displayName: "Terraform Init - ${{ parameters.displayEnvironmentName }}"
-
-    - download: current
-      artifact: tfplan-${{ parameters.environmentName }}
-
-    - script: terraform apply -auto-approve $(Pipeline.Workspace)/tfplan-${{ parameters.environmentName }}/tfplan
-      workingDirectory: terraform
-      displayName: "Terraform Apply - ${{ parameters.displayEnvironmentName }}"
-      env:
-        TF_VAR_admin_password: $(DB_PASSWORD)
-        TF_VAR_admin_user: $(DB_USER)
-        TF_VAR_sql_server_name: $(DB_SERVER)
-        TF_VAR_resource_group_name: $(resource_group_name)
-        TF_VAR_database_name: $(database_name)
-        TF_VAR_ip_address: $(ip_address)
-        TF_VAR_create_sql_server: ${{ parameters.createSqlServer }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: TerraformInstaller@1
+        
+          - script: rm -rf .terraform .terraform.lock.hcl
+            workingDirectory: terraform
+            displayName: "Clean Terraform Files"
+        
+          - script: |
+              terraform init -upgrade -reconfigure \
+                -backend-config="key=${{ parameters.backendStateKey }}"
+            workingDirectory: terraform
+            displayName: "Terraform Init - ${{ parameters.displayEnvironmentName }}"
+        
+          - download: current
+            artifact: tfplan-${{ parameters.environmentName }}
+        
+          - script: terraform apply -auto-approve $(Pipeline.Workspace)/tfplan-${{ parameters.environmentName }}/tfplan
+            workingDirectory: terraform
+            displayName: "Terraform Apply - ${{ parameters.displayEnvironmentName }}"
+            env:
+              TF_VAR_admin_password: $(DB_PASSWORD)
+              TF_VAR_admin_user: $(DB_USER)
+              TF_VAR_sql_server_name: $(DB_SERVER)
+              TF_VAR_resource_group_name: $(resource_group_name)
+              TF_VAR_database_name: $(database_name)
+              TF_VAR_ip_address: $(ip_address)
+              TF_VAR_create_sql_server: ${{ parameters.createSqlServer }}
