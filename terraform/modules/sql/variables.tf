@@ -1,3 +1,7 @@
+variable "create_sql_server" {
+  type    = bool
+  default = true
+}
 variable "server_name" {}
 variable "resource_group_name" {}
 variable "location" {}
