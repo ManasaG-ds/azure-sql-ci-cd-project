@@ -124,4 +124,8 @@ stages:
     - script: |
         flyway -configFiles=$(Build.SourcesDirectory)/flyway/config/flyway.conf migrate
       displayName: "Run Flyway Migrations"
+      env:
+        FLYWAY_URL: "jdbc:sqlserver://$(DB_SERVER).database.windows.net:1433;databaseName=$(database_name);encrypt=true;trustServerCertificate=false;loginTimeout=30;"
+        FLYWAY_USER: $(DB_USER)
+        FLYWAY_PASSWORD: $(DB_PASSWORD)
 
