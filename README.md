@@ -132,7 +132,7 @@ Built a fully automated multi-stage pipeline:
 * SQL Server administration
 * Database migration management (Flyway)
 * Cloud automation on Microsoft Azure
-* DevOps best practices for database systems
+* DevOps best practices for database systems..
 
 ---
 
