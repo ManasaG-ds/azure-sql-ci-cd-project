@@ -6,10 +6,18 @@ This project demonstrates an enterprise-style **Database DevOps CI/CD pipeline**
 
 * **Terraform** for Infrastructure as Code (IaC)
 * **Flyway** for database schema versioning and migrations
-* **Azure DevOps** for CI/CD automation
-* **GitHub Pull Requests** for validation-driven deployments
+* **Azure DevOps Pipelines** for CI/CD automation
+* **GitHub Repositories & Pull Requests** for source control and validation-driven deployments
 
-The solution simulates a modern database deployment workflow used in cloud-native DevOps environments, with automated infrastructure provisioning, schema deployment, multi-environment support, and pull request validation.
+The solution simulates a modern cloud-native database deployment workflow with:
+
+* Automated Azure infrastructure provisioning
+* Database schema migration automation
+* Pull Request validation before merge
+* Multi-environment deployments (DEV & TEST)
+* Manual approval gates before TEST deployment
+* Secure secret management using Azure DevOps Library Variable Groups
+* Automated cleanup/destroy pipeline for infrastructure lifecycle management
 
 ---
 
@@ -28,6 +36,26 @@ The solution simulates a modern database deployment workflow used in cloud-nativ
 
 ---
 
+# 🖼️ Architecture Diagram
+
+## End-to-End CI/CD & Infrastructure Workflow
+
+![Project Architecture](docs/project-architecture.png)
+
+### Workflow Summary
+
+1. Developer pushes code or raises Pull Request in GitHub
+2. PR Validation Pipeline runs Terraform & Flyway validation checks
+3. After merge to main:
+   - DEV deployment runs automatically
+4. Manual approval is required before TEST deployment
+5. Terraform provisions Azure SQL infrastructure
+6. Flyway executes database schema migrations
+7. Terraform state is stored remotely in Azure Storage Account
+8. Secrets and environment variables are managed through Azure DevOps Library Variable Groups
+9. Cleanup pipeline can safely destroy DEV/TEST resources when required
+
+
 # 🔄 CI/CD Workflow
 
 ## Pull Request Validation Flow
@@ -37,30 +65,55 @@ Feature Branch
     ↓
 Pull Request to main
     ↓
-PR Validation Pipeline
-(terraform validate + terraform plan + flyway validate)
+PR Validation Pipeline Triggered
     ↓
-Merge Approval
+Terraform Format Check
+Terraform Validate
+Terraform Plan
+Flyway Validate
+Security Checks
+    ↓
+PR Approval & Merge
 ```
-
 ## Deployment Flow
 
 ```text
 Merge to main
     ↓
-Deployment Pipeline Triggered
+DEV Deployment Pipeline
     ↓
+Terraform Init
 Terraform Validate
-    ↓
 Terraform Plan
+Terraform Apply
+Flyway Migration
+    ↓
+DEV Environment Ready
+    ↓
+Manual Approval Gate
+    ↓
+TEST Deployment Pipeline
     ↓
 Terraform Apply
+Flyway Migration
     ↓
-Flyway Database Migration
+TEST Environment Ready
+```
+
+## Cleanup/ Destroy Flow
+
+```text
+Cleanup Pipeline Triggered
     ↓
-DEV Environment
+Terraform Init
     ↓
-TEST Environment
+Terraform Plan (Destroy)
+    ↓
+Manual Approval
+    ↓
+Terraform Destroy
+    ↓
+Resources Removed
 ```
 
 ---
@@ -133,26 +186,58 @@ Reusable pipeline templates were implemented to reduce duplication and standardi
 
 Implemented a GitHub Pull Request validation model integrated with Azure DevOps pipelines.
 
-### PR Validation Includes
+### PR Validation Checks
 
+The Pull Request validation pipeline ensures infrastructure and database changes are validated before merge.
+
+Implemented validations include:
+
+* Terraform format checks
 * Terraform validation
-* Terraform plan checks
+* Terraform execution plan
 * Flyway migration validation
-* Merge protection using required checks
-
-This ensures infrastructure and database changes are validated before deployment.
+* Security/static analysis checks
+* Merge protection using required pipeline checks
 
 ---
 
-## 🔐 Security & Configuration Management
+# 🧹 Cleanup / Destroy Pipeline
+
+Implemented a separate infrastructure cleanup workflow using Terraform Destroy.
+
+## Cleanup Features
+
+* Separate cleanup pipeline
+* Environment selection (DEV / TEST)
+* Manual approval before destroy
+* Safe infrastructure teardown
+* Terraform state synchronization
+* Cost optimization for non-production environments
+
+This simulates real-world cloud lifecycle management practices used in enterprise DevOps environments.
+
+
+```md
+# 🔐 Security & Configuration Management
 
 Implemented foundational DevOps security practices:
 
+* Azure DevOps Library Variable Groups for secrets management
+* Environment-specific variable groups for DEV and TEST
 * Removed hardcoded credentials from Flyway configuration
 * Secure pipeline variable usage
-* Environment-based secret separation
 * Parameterized deployment configuration
-* Sensitive values managed through Azure DevOps variable groups
+* Terraform remote backend configuration
+* Environment-based secret isolation
+
+### Secrets Managed Securely
+
+* Service Principal Client ID
+* Client Secret
+* Subscription ID
+* Tenant ID
+* SQL Administrator Password
+* Environment-specific variables
 
 ---
 
@@ -160,17 +245,19 @@ Implemented foundational DevOps security practices:
 
 Implemented separate deployment flows for:
 
-| Environment | Purpose                                        |
-| ----------- | ---------------------------------------------- |
-| DEV         | Infrastructure provisioning and schema testing |
-| TEST        | Post-validation deployment testing             |
+| Environment | Purpose |
+|---|---|
+| DEV | Initial infrastructure provisioning and schema validation |
+| TEST | Controlled post-validation deployment testing |
 
-### Environment Isolation Features
+## Environment Deployment Features
 
-* Separate Terraform state files
-* Environment-specific variable groups
-* Independent database deployments
-* Shared infrastructure with controlled reuse
+* Separate Terraform backend state files for DEV and TEST
+* Independent environment configuration
+* Manual approval gate before TEST deployment
+* Environment-specific Azure DevOps Library Variable Groups
+* Shared reusable Terraform modules
+* Controlled deployment promotion workflow
 
 ---
 
@@ -187,14 +274,19 @@ Implemented separate deployment flows for:
 │   └── flyway-stage.yml
 │
 ├── terraform/
-│   ├── modules/sql/
+│   ├── modules/
+│   │   └── sql/
+│   │
+│   ├── .terraform.lock.hcl
 │   ├── main.tf
-│   ├── variables.tf
-│   └── outputs.tf
+│   └── variables.tf
 │
 ├── azure-pipelines.yml
+├── cleanup-pipeline.yml
 ├── pr-validation-pipeline.yml
-└── README.md
+├── .gitignore
+├── README.md
+└── flyway-output.txt
 ```
 
 ---
@@ -205,9 +297,12 @@ Implemented separate deployment flows for:
 * Azure SQL Database
 * Flyway
 * Azure DevOps Pipelines
+* GitHub Repositories
 * GitHub Pull Requests
-* YAML
+* YAML Pipelines
 * Microsoft Azure
+* Azure Storage Account
+* Azure DevOps Library Variable Groups
 
 ---
 
@@ -241,15 +336,18 @@ Implemented separate deployment flows for:
 
 # 🧠 Skills Demonstrated
 
-* Database DevOps practices
-* Azure DevOps CI/CD pipeline engineering
-* Infrastructure as Code (Terraform)
-* Azure SQL administration
-* Database schema migration automation
-* Multi-environment deployment strategy
+This project demonstrates practical exposure to:
+
+* Infrastructure as Code (IaC)
+* CI/CD automation
 * Pull Request validation workflows
-* YAML template modularization
-* Secure configuration management
+* Multi-environment deployment strategy
+* Terraform remote state management
+* Azure DevOps pipeline orchestration
+* Database migration automation
+* Secure secrets management
+* Approval-based release workflows
+* Infrastructure lifecycle management
 
 ---
 
