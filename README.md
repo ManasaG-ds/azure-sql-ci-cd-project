@@ -40,7 +40,7 @@ The solution simulates a modern cloud-native database deployment workflow with:
 
 ## End-to-End CI/CD & Infrastructure Workflow
 
-![Project Architecture](docs/project-architecture.png)
+![Project Architecture](docs/project-architecture.png.png)
 
 ### Workflow Summary
 
