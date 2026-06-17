@@ -75,11 +75,19 @@ Security Checks
     ↓
 PR Approval & Merge
 ```
-
+### Pull Request Raised
 <img src="docs/PR_raised.png" width="500" />
+
+### PR Validation Steps Completed
 <img src="docs/PR_validation_complete_steps.png" width="500" />
+
+### PR Validation Successful
 <img src="docs/PR_validation_success.png" width="500" />
+
+### All Checks Passed
 <img src="docs/PR_checks_passed.png" width="500" />
+
+### Merge Completed Successfully
 <img src="docs/merge_complete.png" width="500" />
 
 
@@ -107,9 +115,10 @@ Flyway Migration
     ↓
 TEST Environment Ready
 ```
-
+### Main Pipeline Triggered After Merge to Main
 <img src="docs/merge_triggered_the_main_pipeline.png" width="500" />
 
+### Main Branch Pipeline Approval stage
 <img src="docs/main_branch_1.png" width="500" />
 
 <img src="docs/main_branch_02.png" width="500" />
@@ -118,8 +127,10 @@ TEST Environment Ready
 
 <img src="docs/main_branch_04.png" width="500" />
 
+### Main Branch Pipeline Execution Steps Overview
 <img src="docs/main_branch_pipeline_steps.png" width="500" />
 
+### Main Branch Pipeline Completed Successfully
 <img src="docs/main_branch_complete_run_01.png" width="500" />
 
 ## Cleanup/ Destroy Flow
@@ -161,10 +172,14 @@ Implemented modular Terraform-based Azure infrastructure deployment:
 * Environment-driven configuration through Azure DevOps variable groups
 
 ---
+
+### Azure SQL Development Instance Created
 <img src="docs/SQL_dev_instance.png" width="500" />
 
+### Azure SQL Test Instance Created
 <img src="docs/SQL_test_instance.png" width="500" />
 
+### Azure SQL Resources Provisioned Successfully via Terraform
 <img src="docs/SQL_resources_created.png" width="500" />
 
 
@@ -244,6 +259,7 @@ Implemented a separate infrastructure cleanup workflow using Terraform Destroy.
 
 This simulates real-world cloud lifecycle management practices used in enterprise DevOps environments.
 
+### Azure DevOps Pipeline Overview (CI/CD Pipelines for Infrastructure and Database Deployment)
 <img src="docs/Pipelines.png" width="500" />
 
 ```md
