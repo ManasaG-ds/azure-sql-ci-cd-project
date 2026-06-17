@@ -240,10 +240,11 @@ Implemented a separate infrastructure cleanup workflow using Terraform Destroy.
 
 This simulates real-world cloud lifecycle management practices used in enterprise DevOps environments.
 
+![Pipelines](docs/Pipelines.png)
 
 ```md
 
-![Pipelines](docs/Pipelines.png)
+
 
 
 # 🔐 Security & Configuration Management
