@@ -264,7 +264,11 @@ Implemented a separate infrastructure cleanup workflow using Terraform Destroy.
 
 This simulates real-world cloud lifecycle management practices used in enterprise DevOps environments.
 
+#### Azure DevOps Cleanup Pipeline – Target Environment Selection
+<img src="docs/Cleanup_run_env_selection.png" width="500" />
 
+#### Infrastructure Cleanup Pipeline Completed Successfully (Resources Destroyed)
+<img src="docs/Cleanup_pipeline_completed.png" width="500" />
 
 # 🔐 Security & Configuration Management
 
