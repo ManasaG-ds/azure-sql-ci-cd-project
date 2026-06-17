@@ -266,11 +266,6 @@ This simulates real-world cloud lifecycle management practices used in enterpris
 
 
 
-```md
-
-
-
-
 # 🔐 Security & Configuration Management
 
 Implemented foundational DevOps security practices:
@@ -313,6 +308,7 @@ Implemented separate deployment flows for:
 * Controlled deployment promotion workflow
 
 ---
+```md
 
 # 📂 Repository Structure
 
