@@ -75,22 +75,12 @@ Security Checks
     ↓
 PR Approval & Merge
 ```
-![PR raised](docs/PR_raised.png)
-
-![PR validation complete steps](docs/PR_validation_complete_steps.png)
-
-![PR validation success](docs/PR_validation_success.png)
-
-![PR checks passed](docs/PR_checks_passed.png)
-
-![merge complete](docs/merge_complete.png)
 
 <img src="docs/PR_raised.png" width="500" />
 <img src="docs/PR_validation_complete_steps.png" width="500" />
 <img src="docs/PR_validation_success.png" width="500" />
 <img src="docs/PR_checks_passed.png" width="500" />
 <img src="docs/merge_complete.png" width="500" />
-
 
 
 ## Deployment Flow
@@ -118,19 +108,19 @@ Flyway Migration
 TEST Environment Ready
 ```
 
-![merge triggered the main pipeline](docs/merge_triggered_the_main_pipeline.png)
+<img src="docs/merge_triggered_the_main_pipeline.png" width="500" />
 
-![main branch 1](docs/main_branch_1.png)
+<img src="docs/main_branch_1.png" width="500" />
 
-![main branch 02](docs/main_branch_02.png)
+<img src="docs/main_branch_02.png" width="500" />
 
-![main branch 03](docs/main_branch_03.png)
+<img src="docs/main_branch_03.png" width="500" />
 
-![main branch 04](docs/main_branch_04.png)
+<img src="docs/main_branch_04.png" width="500" />
 
-![main branch pipeline steps](docs/main_branch_pipeline_steps.png)
+<img src="docs/main_branch_pipeline_steps.png" width="500" />
 
-![main branch complete run 01](docs/main_branch_complete_run_01.png)
+<img src="docs/main_branch_complete_run_01.png" width="500" />
 
 ## Cleanup/ Destroy Flow
 
@@ -248,7 +238,7 @@ Implemented a separate infrastructure cleanup workflow using Terraform Destroy.
 
 This simulates real-world cloud lifecycle management practices used in enterprise DevOps environments.
 
-![Pipelines](docs/Pipelines.png)
+<img src="docs/Pipelines.png" width="500" />
 
 ```md
 
