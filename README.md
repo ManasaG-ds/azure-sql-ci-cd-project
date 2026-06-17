@@ -75,15 +75,15 @@ Security Checks
     ↓
 PR Approval & Merge
 ```
-![PR raised](docs/PR raised.png)
+![PR raised](docs/PR_raised.png)
 
-![PR validation complete steps](docs/PR validation complete steps.png)
+![PR validation complete steps](docs/PR_validation_complete_steps.png)
 
-![PR validation success](docs/PR validation success.png)
+![PR validation success](docs/PR_validation_success.png)
 
-![PR checks passed](docs/PR checks passed.png)
+![PR checks passed](docs/PR_checks_passed.png)
 
-![merge complete](docs/merge complete.png)
+![merge complete](docs/merge_complete.png)
 
 ## Deployment Flow
 
@@ -110,19 +110,19 @@ Flyway Migration
 TEST Environment Ready
 ```
 
-![merge triggered the main pipeline](docs/merge triggered the main pipeline.png)
+![merge triggered the main pipeline](docs/merge_triggered_the_main_pipeline.png)
 
-![main branch 1](docs/main branch 1.png)
+![main branch 1](docs/main_branch_1.png)
 
-![main branch 02](docs/main branch 02.png)
+![main branch 02](docs/main_branch_02.png)
 
-![main branch 03](docs/main branch 03.png)
+![main branch 03](docs/main_branch_03.png)
 
-![main branch 04](docs/main branch 04.png)
+![main branch 04](docs/main_branch_04.png)
 
-![main branch pipeline steps](docs/main branch pipeline steps.png)
+![main branch pipeline steps](docs/main_branch_pipeline_steps.png)
 
-![main branch complete run 01](docs/main branch complete run 01.png)
+![main branch complete run 01](docs/main_branch_complete_run_01.png)
 
 ## Cleanup/ Destroy Flow
 
