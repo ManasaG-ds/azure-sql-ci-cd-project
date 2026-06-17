@@ -75,6 +75,16 @@ Security Checks
     ↓
 PR Approval & Merge
 ```
+![PR raised](docs/PR raised.png)
+
+![PR validation complete steps](docs/PR validation complete steps.png)
+
+![PR validation success](docs/PR validation success.png)
+
+![PR checks passed](docs/PR checks passed.png)
+
+![merge complete](docs/merge complete.png)
+
 ## Deployment Flow
 
 ```text
@@ -99,6 +109,20 @@ Flyway Migration
     ↓
 TEST Environment Ready
 ```
+
+![merge triggered the main pipeline](docs/merge triggered the main pipeline.png)
+
+![main branch 1](docs/main branch 1.png)
+
+![main branch 02](docs/main branch 02.png)
+
+![main branch 03](docs/main branch 03.png)
+
+![main branch 04](docs/main branch 04.png)
+
+![main branch pipeline steps](docs/main branch pipeline steps.png)
+
+![main branch complete run 01](docs/main branch complete run 01.png)
 
 ## Cleanup/ Destroy Flow
 
@@ -218,6 +242,10 @@ This simulates real-world cloud lifecycle management practices used in enterpris
 
 
 ```md
+
+![Pipelines](docs/Pipelines.png)
+
+
 # 🔐 Security & Configuration Management
 
 Implemented foundational DevOps security practices:
