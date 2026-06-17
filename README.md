@@ -85,11 +85,11 @@ PR Approval & Merge
 
 ![merge complete](docs/merge_complete.png)
 
-<img src="docs/PR_raised.png" width="400" />
-<img src="docs/PR_validation_complete_steps.png" width="400" />
-<img src="docs/PR_validation_success.png" width="400" />
-<img src="docs/PR_checks_passed.png" width="400" />
-<img src="docs/merge_complete.png" width="400" />
+<img src="docs/PR_raised.png" width="500" />
+<img src="docs/PR_validation_complete_steps.png" width="500" />
+<img src="docs/PR_validation_success.png" width="500" />
+<img src="docs/PR_checks_passed.png" width="500" />
+<img src="docs/merge_complete.png" width="500" />
 
 
 
