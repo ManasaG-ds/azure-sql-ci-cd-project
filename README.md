@@ -172,11 +172,10 @@ Implemented modular Terraform-based Azure infrastructure deployment:
 * Environment-driven configuration through Azure DevOps variable groups
 
 ---
-
-### Azure SQL Development Instance Created
+### Azure SQL Test Instance Created
 <img src="docs/SQL_dev_instance.png" width="500" />
 
-### Azure SQL Test Instance Created
+### Azure SQL Development Instance Created
 <img src="docs/SQL_test_instance.png" width="500" />
 
 ### Azure SQL Resources Provisioned Successfully via Terraform
