@@ -203,6 +203,9 @@ Implemented Flyway-based database schema version control and deployment automati
 
 ---
 
+<img src="docs/SQL_FLyway01.png" width="500" />
+
+
 ## 🔄 Azure DevOps CI/CD Pipeline
 
 Built a reusable multi-stage YAML pipeline architecture.
