@@ -221,6 +221,9 @@ Built a reusable multi-stage YAML pipeline architecture.
 * Environment-specific variable groups
 * Pull Request validation workflow
 
+<img src="docs/Pipelines.png" width="600" />
+
+
 ### Template-Based Pipeline Design
 
 Reusable pipeline templates were implemented to reduce duplication and standardize deployments across environments.
@@ -261,8 +264,7 @@ Implemented a separate infrastructure cleanup workflow using Terraform Destroy.
 
 This simulates real-world cloud lifecycle management practices used in enterprise DevOps environments.
 
-### Azure DevOps Pipeline Overview (CI/CD Pipelines for Infrastructure and Database Deployment)
-<img src="docs/Pipelines.png" width="500" />
+
 
 ```md
 
