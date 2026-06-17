@@ -161,6 +161,12 @@ Implemented modular Terraform-based Azure infrastructure deployment:
 * Environment-driven configuration through Azure DevOps variable groups
 
 ---
+<img src="docs/SQL_dev_instance.png" width="500" />
+
+<img src="docs/SQL_test_instance.png" width="500" />
+
+<img src="docs/SQL_resources_created.png" width="500" />
+
 
 ## 🧱 Database Migration Management (Flyway)
 
