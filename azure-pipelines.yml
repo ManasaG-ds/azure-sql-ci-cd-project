@@ -3,6 +3,13 @@ trigger:
     include:
       - main
 
+  paths:
+    exclude:
+      - README.md
+      - '**/README.md'
+      - docs/*
+      - '**/docs/*'
+
 pr: none
 
 stages:
